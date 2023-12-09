@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { StudentServices } from './student.servies'
 
-const createStudent = async(req: Request, res: Response) => {
+const createStudent = async (req: Request, res: Response) => {
   try {
     //1. get data from client body
     const { student: studentData } = req.body
@@ -19,6 +19,40 @@ const createStudent = async(req: Request, res: Response) => {
   }
 }
 
+const getAllStudents = async (req: Request, res: Response) => {
+  try {
+    // 1.call service function to get all student
+    const result = await StudentServices.getAllStudentsFromDB()
+    //   2.res send
+    res.status(200).send({
+      success: true,
+      message: 'Students are retrieve successfully',
+      data: result,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//single student
+const getSingleStudent = async (req: Request, res: Response) => {
+  try {
+    // 1.get id from client side using req.params.id
+    const { studentId } = req.params
+    // 2. call service function using id
+    const result = await StudentServices.getSingleStudentFromDB(studentId)
+    // 3.res send
+    res.status(200).send({
+      success: true,
+      message: 'Student retrieve successfully',
+      data: result,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
 export const StudentControllers = {
   createStudent,
+  getAllStudents,
+  getSingleStudent,
 }
